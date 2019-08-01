@@ -3,37 +3,98 @@ import mysql.connector
 from com.eurekamw.utils import DBConstants as DC, DBUtils as dbu, SQLQueries as sqlq
 
 
-def is_present_in_db(name):
-    return False
-
 def get_connection():
-        return mysql.connector.connect(host=DC.HOSTNAME,
-                                       user=DC.DB_USERNAME,
-                                       passwd=DC.DB_PASSWORD,
-                                       database=DC.DB_NAME)
+    return mysql.connector.connect(host=DC.HOSTNAME, user=DC.DB_USERNAME, passwd=DC.DB_PASSWORD, database=DC.DB_NAME)
 
 
 def insert_word(word):
-    name = word.name
-    xdef = word.xdef
+    try:
+        name = word.name
+        xdef = word.xdef
 
-    if name is None or xdef is None:
-        print("Invalid word: name/xdef cannot be None")
-        return
+        if name is None or xdef is None:
+            print("Invalid word: name/xdef cannot be None")
+            return
 
-    category = word.category
-    shortdef = word.shortdef
-    stems = word.stems
+        category = word.category
+        shortdef = word.shortdef
+        stems = word.stems
 
-    connection = dbu.get_connection()
-    if connection is None:
-        print("Unable to get mysql db object")
-        return
+        connection = dbu.get_connection()
+        if connection is None:
+            print("Unable to get mysql db object")
+            return False
 
-    cursor = connection.cursor()
-    values = (name, category, stems, shortdef, xdef)
-    cursor.execute(sqlq.INSERT_WORD,values)
-    connection.commit()
+        cursor = connection.cursor()
+        values = (name, category, stems, shortdef, xdef)
+        cursor.execute(sqlq.INSERT_WORD,values)
+        connection.commit()
+        return True
+    except mysql.connector.Error as error:
+        print('Failed to get record from database: {}'.format(error))
+        return False
+    finally:
+        # Closing database connection
+        if(connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print('MySQL connection is closed')
 
-    cursor.close()
-    connection.close()
+
+def add_user(word):
+    try:
+        name = word.name
+        xdef = word.xdef
+
+        if name is None or xdef is None:
+            print("Invalid word: name/xdef cannot be None")
+            return
+
+        category = word.category
+        shortdef = word.shortdef
+        stems = word.stems
+
+        connection = dbu.get_connection()
+        if connection is None:
+            print("Unable to get mysql db object")
+            return False
+
+        cursor = connection.cursor()
+        values = (name, category, stems, shortdef, xdef)
+        cursor.execute(sqlq.INSERT_WORD,values)
+        connection.commit()
+        return True
+    except mysql.connector.Error as error:
+        print('Failed to get record from database: {}'.format(error))
+        return False
+    finally:
+        # Closing database connection
+        if(connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print('MySQL connection is closed')
+
+
+def is_username_unique(username):
+    try:
+        connection = dbu.get_connection()
+        if connection is None:
+            print("Unable to get mysql db object")
+            return False
+
+        cursor = connection.cursor()
+        cursor.execute(sqlq.GET_USER % username)
+        record = cursor.fetchall()
+
+        if len(record) > 0:
+            return False
+
+    except mysql.connector.Error as error:
+        print('Failed to get record from database: {}'.format(error))
+
+    finally:
+        # Closing database connection
+        if(connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print('MySQL connection is closed')
