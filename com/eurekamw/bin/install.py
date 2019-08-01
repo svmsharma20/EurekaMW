@@ -14,7 +14,7 @@
 
 """
 
-from com.eurekamw.utils import DBConstants as DC, DBUtils as dbu
+from com.eurekamw.utils import DBUtils as dbu
 
 dbQueries = 'SHOW DATABASES'
 
@@ -22,10 +22,11 @@ sqlQueries = ('CREATE TABLE users (username VARCHAR(255), name VARCHAR(255), pas
               'CREATE TABLE list (username VARCHAR(255), listname VARCHAR(255), description TEXT, wordlist TEXT, PRIMARY KEY(username, listname))',
               'CREATE TABLE words (word VARCHAR(255), category VARCHAR(255), stems TEXT, shortdef TEXT, xdef TEXT, PRIMARY KEY(word))')
 
+
 def createSchema():
     # Get the db connection
     connection = dbu.getConnection()
-    if connection==None :
+    if connection is None:
         print("Unable to get mysql db object")
         return
 
@@ -33,7 +34,7 @@ def createSchema():
 
     # Create schemas
     for query in sqlQueries:
-        print("Executing: %1s" %(query))
+        print("Executing: %1s" % (query))
         cursor.execute(query)
 
     # Insert admin data
@@ -46,7 +47,9 @@ def createSchema():
     cursor.close()
     connection.close()
 
+
 def __init__():
     createSchema()
+
 
 __init__()
