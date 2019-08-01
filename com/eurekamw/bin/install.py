@@ -23,9 +23,9 @@ sqlQueries = ('CREATE TABLE users (username VARCHAR(255), name VARCHAR(255), pas
               'CREATE TABLE words (word VARCHAR(255), category VARCHAR(255), stems TEXT, shortdef TEXT, xdef TEXT, PRIMARY KEY(word))')
 
 
-def createSchema():
+def create_schema():
     # Get the db connection
-    connection = dbu.getConnection()
+    connection = dbu.get_connection()
     if connection is None:
         print("Unable to get mysql db object")
         return
@@ -49,7 +49,7 @@ def createSchema():
 
 
 def __init__():
-    createSchema()
+    create_schema()
 
 
 __init__()

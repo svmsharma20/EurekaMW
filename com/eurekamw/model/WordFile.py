@@ -1,48 +1,59 @@
 class Word:
-    def __init__(self, name):
+    def __init__(self, name, xdef):
         self.name = name
         self.shortdef = ""
         self.category = ""
         self.stems = ""
+        self.xdef = xdef;
 
-    def __init__(self, name, category):
+    def __init__(self, name, category, xdef):
         self.name = name
         self.shortdef = ""
         self.category = category
         self.stems = ""
+        self.xdef = xdef;
 
-    def __init__(self, name, stems):
+    def __init__(self, name, stems, xdef):
         self.name = name
         self.shortdef = ""
         self.category = ""
         self.stems = stems
+        self.xdef = xdef;
 
-    def __init__(self, name, category, stems):
+    def __init__(self, name, category, stems, xdef):
         self.name = name
         self.shortdef = ""
         self.category = category
         self.stems = stems
+        self.xdef = xdef;
 
-    def setName(self,name):
+    def __init__(self, name, category, stems, shortdef, xdef):
+        self.name = name
+        self.shortdef = shortdef
+        self.category = category
+        self.stems = stems
+        self.xdef = xdef;
+
+    def set_name(self,name):
         self.name = name
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
     def setShortDef(self,shortdef):
         self.shortdef = shortdef
 
-    def getShortDef(self):
+    def get_short_def(self):
         return self.shortdef
 
-    def setCategory(self,category):
+    def set_category(self,category):
         self.category = category
 
-    def getCategory(self):
+    def get_category(self):
         return self.category
 
-    def setStems(self,stems):
+    def set_stems(self,stems):
         self.stems = stems
 
-    def getStems(self):
+    def get_stems(self):
         return self.stems

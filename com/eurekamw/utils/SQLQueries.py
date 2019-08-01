@@ -1,0 +1,1 @@
+INSERT_WORD = 'INSERT INTO words (word, category, stems, shortdef, xdef) VALUES (%s, %s, %s, %s, %s)'

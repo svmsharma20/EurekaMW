@@ -7,14 +7,14 @@ class WordList:
         self.name = name
         self.description = description
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def setName(self,name):
+    def set_name(self,name):
         self.name = name
 
-    def getDescription(self):
+    def get_description(self):
         return self.description
 
-    def setDescription(self,description):
+    def set_description(self,description):
         self.description = description

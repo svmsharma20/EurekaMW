@@ -9,12 +9,12 @@ resp = requests.get(searchURL)
 
 print(resp.json())"""
 
-from com.eurekamw.utils.WordUtils import generateList
+from com.eurekamw.utils.WordUtils import generate_list
 
 
 # Get the words from the user as a string
 words = input("Enter the list of words(comma separated)")
-wordList = generateList(words)
+wordList = generate_list(words)
 
 for word in wordList:
     print(word)
