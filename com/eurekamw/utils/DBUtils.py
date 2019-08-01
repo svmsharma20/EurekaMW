@@ -1,3 +1,4 @@
+from operator import is_not
 
 import mysql.connector
 from com.eurekamw.utils import DBConstants as DC, DBUtils as dbu, SQLQueries as sqlq
@@ -41,18 +42,16 @@ def insert_word(word):
             print('MySQL connection is closed')
 
 
-def add_user(word):
+def add_user(user):
+    username = user.username
+
+    if not dbu.is_username_unique(username):
+        print("Username is not available")
+        return False
+
     try:
-        name = word.name
-        xdef = word.xdef
-
-        if name is None or xdef is None:
-            print("Invalid word: name/xdef cannot be None")
-            return
-
-        category = word.category
-        shortdef = word.shortdef
-        stems = word.stems
+        name = user.name
+        password = user.password
 
         connection = dbu.get_connection()
         if connection is None:
@@ -60,8 +59,8 @@ def add_user(word):
             return False
 
         cursor = connection.cursor()
-        values = (name, category, stems, shortdef, xdef)
-        cursor.execute(sqlq.INSERT_WORD,values)
+        values = (username, name, password)
+        cursor.execute(sqlq.INSERT_USER,values)
         connection.commit()
         return True
     except mysql.connector.Error as error:
@@ -83,12 +82,12 @@ def is_username_unique(username):
             return False
 
         cursor = connection.cursor()
-        cursor.execute(sqlq.GET_USER % username)
+        cursor.execute(sqlq.GET_USER.format(username))
         record = cursor.fetchall()
 
         if len(record) > 0:
             return False
-
+        return True
     except mysql.connector.Error as error:
         print('Failed to get record from database: {}'.format(error))
 

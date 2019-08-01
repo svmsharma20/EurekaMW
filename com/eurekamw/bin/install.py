@@ -14,7 +14,10 @@
 
 """
 
-from com.eurekamw.utils import DBUtils as dbu
+import mysql.connector
+
+from com.eurekamw.utils import DBUtils as dbu, SQLQueries as sqlq
+from com.eurekamw.model import UserFile as uf
 
 dbQueries = 'SHOW DATABASES'
 
@@ -24,28 +27,35 @@ sqlQueries = ('CREATE TABLE users (username VARCHAR(255), name VARCHAR(255), pas
 
 
 def create_schema():
-    # Get the db connection
-    connection = dbu.get_connection()
-    if connection is None:
-        print("Unable to get mysql db object")
-        return
+    try:
+        # Get the db connection
+        connection = dbu.get_connection()
+        if connection is None:
+            print("Unable to get mysql db object")
+            return
 
-    cursor = connection.cursor()
+        cursor = connection.cursor()
 
-    # Create schemas
-    for query in sqlQueries:
-        print("Executing: %1s" % (query))
-        cursor.execute(query)
+        # Create schemas
+        for query in sqlQueries:
+            print("Executing: %1s" % (query))
+            cursor.execute(query)
 
-    # Insert admin data
-    print("Adding admin user")
-    sql = "INSERT INTO users (username, name, password) VALUES (%s, %s, %s)"
-    val = ("administrator", "Admin", "password")
-    cursor.execute(sql, val)
-    connection.commit()
+        # Insert admin data
+        print("Adding admin user")
+        admin_user = uf.User('administrator', 'Admin', 'password')
+        dbu.add_user(admin_user)
 
-    cursor.close()
-    connection.close()
+    except mysql.connector.Error as error:
+        print('Failed to get record from database: {}'.format(error))
+        return False
+
+    finally:
+        # Closing database connection
+        if (connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print('MySQL connection is closed')
 
 
 def __init__():
