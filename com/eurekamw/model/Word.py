@@ -3,11 +3,25 @@ class Word:
         self.name = name
         self.shortdef = ""
         self.category = ""
+        self.stems = ""
 
     def __init__(self, name, category):
         self.name = name
         self.shortdef = ""
         self.category = category
+        self.stems = ""
+
+    def __init__(self, name, stems):
+        self.name = name
+        self.shortdef = ""
+        self.category = ""
+        self.stems = stems
+
+    def __init__(self, name, category, stems):
+        self.name = name
+        self.shortdef = ""
+        self.category = category
+        self.stems = stems
 
     def setName(self,name):
         self.name = name
@@ -26,3 +40,9 @@ class Word:
 
     def getCategory(self):
         return self.category
+
+    def setStems(self,stems):
+        self.stems = stems
+
+    def getStems(self):
+        return self.stems

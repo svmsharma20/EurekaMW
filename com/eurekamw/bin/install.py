@@ -13,46 +13,38 @@
         select USER FROM mysql.user;
 
 """
-import mysql.connector
+
 from com.eurekamw.utils import DBConstants as DC, DBUtils as dbu
 
 dbQueries = 'SHOW DATABASES'
 
 sqlQueries = ('CREATE TABLE users (username VARCHAR(255), name VARCHAR(255), password VARCHAR(255), PRIMARY KEY(username))',
               'CREATE TABLE list (username VARCHAR(255), listname VARCHAR(255), description TEXT, wordlist TEXT, PRIMARY KEY(username, listname))',
-              'CREATE TABLE words (word VARCHAR(255), category VARCHAR(255), shortdef TEXT, xdef TEXT PRIMARY KEY(word))')
+              'CREATE TABLE words (word VARCHAR(255), category VARCHAR(255), stems TEXT, shortdef TEXT, xdef TEXT, PRIMARY KEY(word))')
 
 def createSchema():
-    # mydb = mysql.connector.connect(host=DC.HOSTNAME, user=DC.DB_USERNAME, passwd=DC.DB_PASSWORD)
-    #
-    # if mydb==None :
-    #     print("Unable to get mysql db object")
-    #     return
-    #
-    # mycursor = mydb.cursor()
-    #
-    # # Initialize database and schema
-    # for query in dbQueries:
-    #     print("Executing: %1s" %(dbQueries))
-    #     mycursor.execute(dbQueries)
-    #     for x in mycursor:
-    #         print(x)
-    #
-    # mycursor.close()
-    # mydb.close()
+    # Get the db connection
+    connection = dbu.getConnection()
+    if connection==None :
+        print("Unable to get mysql db object")
+        return
 
-    mycursor = dbu.getConnection().cursor()
+    cursor = connection.cursor()
 
+    # Create schemas
     for query in sqlQueries:
         print("Executing: %1s" %(query))
-        mycursor.execute(query)
+        cursor.execute(query)
 
-    # Insert raw data
+    # Insert admin data
+    print("Adding admin user")
     sql = "INSERT INTO users (username, name, password) VALUES (%s, %s, %s)"
     val = ("administrator", "Admin", "password")
-    mycursor.execute(sql, val)
+    cursor.execute(sql, val)
+    connection.commit()
 
-    mycursor.close()
+    cursor.close()
+    connection.close()
 
 def __init__():
     createSchema()
