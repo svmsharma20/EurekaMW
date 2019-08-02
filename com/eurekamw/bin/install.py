@@ -16,7 +16,7 @@
 
 import mysql.connector
 
-from com.eurekamw.utils import DBUtils as dbu, SQLQueries as sqlq
+from com.eurekamw.utils import DBUtils as dbu, UserUtils as uutils
 from com.eurekamw.model import UserFile as uf
 
 dbQueries = 'SHOW DATABASES'
@@ -44,7 +44,7 @@ def create_schema():
         # Insert admin data
         print("Adding admin user")
         admin_user = uf.User('administrator', 'Admin', 'password')
-        dbu.add_user(admin_user)
+        uutils.add_user(admin_user)
 
     except mysql.connector.Error as error:
         print('Failed to get record from database: {}'.format(error))

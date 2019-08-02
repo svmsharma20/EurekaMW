@@ -1,7 +1,7 @@
 
-from com.eurekamw.utils.DBUtils import is_present_in_db
+from com.eurekamw.utils import UserUtils as uutils
 
 def search(name):
-    if is_present_in_db(name):
+    if uutils.is_present_in_db(name):
         return True
     return False
