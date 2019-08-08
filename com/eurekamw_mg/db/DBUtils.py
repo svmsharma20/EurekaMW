@@ -24,7 +24,7 @@ def initialize_db():
 
         db = client[DC.DB_NAME]
 
-        user_schema = db[DC.USER_SCHEMA]
+        user_schema = db[DC.USER_COLL]
         admin_user = uf.User('administrator', 'Admin', 'password')
         if is_id_present(admin_user.loginid):
             print("Login Id is not available")
@@ -45,7 +45,7 @@ def is_id_present(loginid):
 
         db = client[DC.DB_NAME]
 
-        user_schema = db[DC.USER_SCHEMA]
+        user_schema = db[DC.USER_COLL]
         user={}
         user[JC.ID] = loginid
         results = user_schema.find(user)

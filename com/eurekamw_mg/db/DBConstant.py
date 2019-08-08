@@ -5,9 +5,10 @@ PORT=27017
 
 DB_NAME = 'eureka'
 
-USER_SCHEMA = 'users'
+USER_COLL = 'users'
 
-LISTS_SCHEMA = 'lists'
+LISTS_COLL = 'lists'
 
-WORDS_SCHEMA = 'words'
+WORDS_COLL = 'words'
 
+CATEGORY_COLL = 'category'
