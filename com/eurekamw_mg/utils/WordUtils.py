@@ -39,7 +39,7 @@ def is_valid_word(wordname):
 
 # print(update_category('charm','magical charms'))
 
-def get_category_name(wordname):
+def get_category(wordname):
     try:
         client = dbu.get_client()
 
@@ -49,11 +49,11 @@ def get_category_name(wordname):
         search_data = {}
         search_data[JC.LIST] = wordname
         if cat_coll.count_documents(search_data) == 0:
-            return False, None
+            return None
         result = cat_coll.find(search_data)
-        return True, result[0]
+        return result[0][JC.NAME]
     except Exception as exception:
         traceback.print_exc()
-        return False, None
+        return None
     finally:
         client.close()

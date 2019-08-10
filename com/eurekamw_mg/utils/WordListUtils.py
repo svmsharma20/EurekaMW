@@ -1,7 +1,7 @@
 
 import traceback
 
-from com.eurekamw_mg.utils import SearchUtils as su
+from com.eurekamw_mg.utils import SearchUtils as su, WordUtils as wu
 from com.eurekamw_mg.db import DBUtils as dbu, DBConstant as DC
 from com.eurekamw_mg.model import JSONCostants as JC
 
@@ -35,7 +35,7 @@ def add_words_to_list(list_name, word_list):
         client.close()
 
 
-def remove_words_from_category(list_name, word_list):
+def remove_words_from_list(list_name, word_list):
     try:
         client = dbu.get_client()
 
@@ -53,3 +53,33 @@ def remove_words_from_category(list_name, word_list):
         traceback.print_exc()
     finally:
         client.close()
+
+def sanatize_List(list):
+    # Create a list from the input by splitting based on comma and trimming the whitespaces
+    wordList = [word.strip().lower() for word in list]
+    # return the wordlist
+    return wordList
+
+def get_list(listname):
+    try:
+        word_list = []
+
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+        list_coll = db[DC.LISTS_COLL]
+
+        list_create_query = {}
+        list_create_query[JC.NAME] = listname
+
+        results = list_coll.find(list_create_query)
+
+        if results is not None:
+            word_list = results[0][JC.LIST]
+        return word_list
+    except:
+        traceback.print_exc()
+    finally:
+        client.close()
+
+print(get_list('testlist'))

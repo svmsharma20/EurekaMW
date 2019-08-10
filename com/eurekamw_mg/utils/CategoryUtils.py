@@ -162,7 +162,7 @@ def is_word_present(wordname):
         search_data = {}
         search_data[JC.LIST] = wordname
         if cat_coll.count_documents(search_data) == 0:
-            return True
+            return False
         return True
     except Exception as exception:
         traceback.print_exc()

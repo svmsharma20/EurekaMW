@@ -48,5 +48,5 @@ class WordList:
             client.close()
 
 
-list=WordList('testlist','description.....',['abate','abash','bohemian','ggkggg','indifferent', 'impassive'])
-list.create()
+# list=WordList('testlist','description.....',['abate','abash','bohemian','ggkggg','indifferent', 'impassive'])
+# list.create()

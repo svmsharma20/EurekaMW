@@ -23,6 +23,8 @@ LIST = 'list'
 
 STEMS = 'meta.stems'
 
+SHORTDEF = 'shortdef'
+
 LOGINID = 'loginid'
 
 USERNAME = 'username'
