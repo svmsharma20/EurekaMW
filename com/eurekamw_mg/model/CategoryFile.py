@@ -61,3 +61,7 @@ class Category:
             return False, result
         finally:
             client.close()
+
+
+cat=Category('attack',['assail','belabour'])
+cat.add_category()

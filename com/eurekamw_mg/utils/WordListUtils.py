@@ -5,7 +5,7 @@ from collections import defaultdict
 
 from com.eurekamw_mg.utils import SearchUtils as su, WordUtils as wu
 from com.eurekamw_mg.db import DBUtils as dbu, DBConstant as DC
-from com.eurekamw_mg.model import JSONCostants as JC
+from com.eurekamw_mg.model import JSONCostants as JC, WordListFile as wlf
 
 def add_words_to_list(list_name, word_list):
     try:
@@ -22,7 +22,7 @@ def add_words_to_list(list_name, word_list):
         client = dbu.get_client()
 
         db = client[DC.DB_NAME]
-        list_coll = db[DC.LIST_COLL]
+        list_coll = db[DC.LISTS_COLL]
 
         list_update_query={}
         list_update_query[JC.NAME] = list_name
@@ -102,4 +102,34 @@ def get_compl_list(listname):
     complete_list[JC.LIST]=rlist
     return complete_list
 
+def create(name, list, description=""):
+    try:
+        in_valid_word_list = []
+        for word in list:
+            is_valid = su.search(word)
+            if not is_valid:
+                in_valid_word_list.append(word)
+                list.remove(word)
+
+        if len(in_valid_word_list) > 0:
+            print('Unable to find following words: {0}'.format(in_valid_word_list))
+
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+        list_coll = db[DC.LISTS_COLL]
+
+        list_create_query = {}
+        list_create_query[JC.NAME] = name
+        list_create_query[JC.DESCRIPTION] = description
+        list_create_query[JC.LIST] = list
+
+        list_coll.insert_one(list_create_query)
+    except:
+        traceback.print_exc()
+    finally:
+        client.close()
+
 # print(get_compl_list('testlist'))
+lt=['abate','abash','chagrin']
+create('testlist1',lt)
