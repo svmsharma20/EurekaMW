@@ -57,3 +57,5 @@ def get_category(wordname):
         return None
     finally:
         client.close()
+
+# print(get_category('assail'))

@@ -69,6 +69,35 @@ def search(wordname):
         return word
     return get_word_from_mw(wordname)
 
+def get_selected_word_from_db(wordname,filter=""):
+    if filter == None or len(filter) == 0:
+        return get_word_from_db(wordname)
+
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+
+        words_schema = db[DC.WORDS_COLL]
+        search_data = {}
+        search_data[JC.STEMS] = wordname
+
+        filter_query={}
+        filter_query[JC.ID] = 0
+        for field in filter:
+            filter_query[field]=1
+
+        if words_schema.count_documents(search_data) == 0:
+            return None
+        result = words_schema.find(search_data,filter_query)
+        return result[0]
+    except Exception as exception:
+        traceback.print_exc()
+        return  None
+    finally:
+        client.close()
+
+
 def is_word_present_in_mw(wordname):
     search_url = get_url(wordname)
 
@@ -78,4 +107,3 @@ def is_word_present_in_mw(wordname):
         if JC.META in resp_data[0]:
             return True
     return False
-

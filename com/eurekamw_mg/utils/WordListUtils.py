@@ -1,6 +1,8 @@
 
 import traceback
 
+from collections import defaultdict
+
 from com.eurekamw_mg.utils import SearchUtils as su, WordUtils as wu
 from com.eurekamw_mg.db import DBUtils as dbu, DBConstant as DC
 from com.eurekamw_mg.model import JSONCostants as JC
@@ -60,7 +62,7 @@ def sanatize_List(list):
     # return the wordlist
     return wordList
 
-def get_list(listname):
+def get_list_names(listname):
     try:
         word_list = []
 
@@ -82,4 +84,22 @@ def get_list(listname):
     finally:
         client.close()
 
-print(get_list('testlist'))
+def get_compl_list(listname):
+    namelist=get_list_names(listname)
+    complete_list={}
+    complete_list[JC.NAME]=listname
+
+    rlist={}
+    for name in namelist:
+        cat=wu.get_category(name)
+        if cat is None:
+            cat='None'
+        if cat in rlist:
+            rlist[cat].append({name:su.get_selected_word_from_db(name,[JC.SHORTDEF])})
+        else:
+            rlist[cat]=[{name:su.get_selected_word_from_db(name,[JC.SHORTDEF])}]
+
+    complete_list[JC.LIST]=rlist
+    return complete_list
+
+print(get_compl_list('testlist'))

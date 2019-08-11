@@ -170,4 +170,23 @@ def is_word_present(wordname):
     finally:
         client.close()
 
+def get_category(category_name):
+    try:
+        client = dbu.get_client()
 
+        db = client[DC.DB_NAME]
+
+        cat_coll = db[DC.CATEGORY_COLL]
+        search_data = {}
+        filter_data={}
+        filter_data[JC.ID]=0
+        search_data[JC.NAME] = category_name
+        result=cat_coll.find(search_data,filter_data)
+        if result is not None:
+            return result[0]
+        return {}
+    except Exception as exception:
+        traceback.print_exc()
+        return False
+    finally:
+        client.close()

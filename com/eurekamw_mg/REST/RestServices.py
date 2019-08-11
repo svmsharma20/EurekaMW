@@ -1,7 +1,7 @@
 
 from flask import Flask, jsonify, request, json
 
-from com.eurekamw_mg.utils import SearchUtils as su
+from com.eurekamw_mg.utils import SearchUtils as su, WordListUtils as wlu, CategoryUtils as cu
 
 app = Flask(__name__)
 
@@ -11,8 +11,6 @@ def get_word(word_name):
     if result is None:
         return jsonify('{}')
     res=jsonify(result)
-    # res['name']=result['_id']
-    # res['shortdef']=result['shortdef']
     return res
 
 # @app.route('/messages', methods=['POST'])
@@ -22,6 +20,24 @@ def get_word(word_name):
 #
 #     elif request.headers['Content-Type'] == 'application/json':
 #         return "JSON Message: " + json.dumps(request.json)
+
+@app.route('/list/search/<list_name>', methods=['GET'])
+def get_list(list_name):
+    result = wlu.get_compl_list(list_name)
+    if result is None:
+        return jsonify('{}')
+    res=jsonify(result)
+    return res
+
+@app.route('/category/search/<cat_name>', methods=['GET'])
+def get_category(cat_name):
+    result = cu.get_category(cat_name)
+    if result is None:
+        return jsonify('{}')
+    res=jsonify(result)
+    return res
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
