@@ -3,6 +3,8 @@
 """
 import traceback
 
+import dns
+
 from pymongo import MongoClient, errors
 from com.eurekamw_mg.db import DBConstant as DC
 from com.eurekamw_mg.model import UserFile as uf, JSONCostants as JC
@@ -10,11 +12,16 @@ from com.eurekamw_mg.model import UserFile as uf, JSONCostants as JC
 def get_client():
     hostname = DC.HOSTNAME
     port = DC.PORT
-    client = MongoClient(hostname, port)
-    if client is None:
-        raise Exception('Unable to get mongodb client got server: {0}; port:{1}'.format(hostname,port))
-        return None
-    return client
+    # client = MongoClient(hostname, port)
+    try:
+        client = MongoClient(DC.CONNECT_URL)
+        if client is None:
+            raise Exception('Unable to get mongodb client got server: {0}; port:{1}'.format(hostname,port))
+            return None
+        return client
+    except:
+        traceback.print_exc()
+
 
 
 #   Initialize the db to create eureka database and users collection. Also add an admin user in it.

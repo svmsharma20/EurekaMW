@@ -102,4 +102,4 @@ def get_compl_list(listname):
     complete_list[JC.LIST]=rlist
     return complete_list
 
-print(get_compl_list('testlist'))
+# print(get_compl_list('testlist'))

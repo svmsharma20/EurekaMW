@@ -12,3 +12,5 @@ LISTS_COLL = 'lists'
 WORDS_COLL = 'words'
 
 CATEGORY_COLL = 'category'
+
+CONNECT_URL='mongodb+srv://eureka:eureka@cluster0-hnzhq.mongodb.net/eureka?retryWrites=true&w=majority'
