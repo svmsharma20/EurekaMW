@@ -217,7 +217,7 @@ HEADER
 }
 
 .header {
-    /*position: absolute;*/
+    position: absolute;
     z-index: 111;
     left: 0;
     top: 0;

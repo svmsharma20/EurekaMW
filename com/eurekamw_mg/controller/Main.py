@@ -43,8 +43,14 @@ def lists():
 @app.route('/xlists/<list_name>')
 def xlists(list_name):
     result=wlu.get_compl_list(list_name)
+    name=result[JC.NAME]
+    list=result[JC.LIST]
+    res=(name,list)
     return render_template('xlists.html', result=result)
 
+@app.route('/list/update')
+def updatelist():
+    return render_template('updatelist.html')
 
 @app.route('/test')
 def test():

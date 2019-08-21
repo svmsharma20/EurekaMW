@@ -156,7 +156,7 @@ def get_lists():
     finally:
         client.close()
 
-# print(get_compl_list('testlist'))
+print(get_compl_list('testlist'))
 # lt=['abate','abash','chagrin']
 # create('testlist1',lt)
 # print(get_lists())
