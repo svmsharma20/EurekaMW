@@ -12,9 +12,10 @@ from com.eurekamw_mg.model import UserFile as uf, JSONCostants as JC
 def get_client():
     hostname = DC.HOSTNAME
     port = DC.PORT
-    # client = MongoClient(hostname, port)
     try:
-        client = MongoClient(DC.CONNECT_URL)
+        client = MongoClient(hostname, port)
+
+        # client = MongoClient(DC.CONNECT_URL)
         if client is None:
             raise Exception('Unable to get mongodb client got server: {0}; port:{1}'.format(hostname,port))
             return None

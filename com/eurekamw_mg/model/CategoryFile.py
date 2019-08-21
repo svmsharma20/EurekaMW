@@ -14,7 +14,7 @@ class Category:
         self.name = str.lower(name)
         self.list = wlu.sanatize_List(list)
 
-    def add(self):
+    def add_word(self):
         valid_wordlist = []
         invalid_wordlist = []
         for wordname in self.list:
@@ -33,8 +33,8 @@ class Category:
         result[LC.INVALID_LIST] = invalid_wordlist
         return result
 
-    def add_category(self):
-        result = self.add()
+    def create(self):
+        result = self.add_word()
         try:
             client = dbu.get_client()
 
@@ -61,7 +61,3 @@ class Category:
             return False, result
         finally:
             client.close()
-
-
-cat=Category('attack',['assail','belabour'])
-cat.add_category()

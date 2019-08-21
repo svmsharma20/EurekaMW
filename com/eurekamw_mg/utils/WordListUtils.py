@@ -1,11 +1,16 @@
 
 import traceback
 
-from collections import defaultdict
-
 from com.eurekamw_mg.utils import SearchUtils as su, WordUtils as wu
 from com.eurekamw_mg.db import DBUtils as dbu, DBConstant as DC
-from com.eurekamw_mg.model import JSONCostants as JC, WordListFile as wlf
+from com.eurekamw_mg.model import JSONCostants as JC
+
+def generate_list(words):
+    # Create a list from the input by splitting based on comma and trimming the whitespaces
+    wordList = [word.strip().lower() for word in words.split(',')]
+    #return the wordlist
+    return wordList
+
 
 def add_words_to_list(list_name, word_list):
     try:
@@ -95,10 +100,11 @@ def get_compl_list(listname):
         if cat is None:
             cat='None'
         if cat in rlist:
-            rlist[cat].append({name:su.get_selected_word_from_db(name,[JC.SHORTDEF])})
+            # rlist[cat].append({name:su.get_selected_word_from_db(name,[JC.SHORTDEF])})
+            rlist[cat].append({JC.NAME: name,JC.SHORTDEF:su.get_selected_word_from_db(name, [JC.SHORTDEF])[JC.SHORTDEF]})
         else:
-            rlist[cat]=[{name:su.get_selected_word_from_db(name,[JC.SHORTDEF])}]
-
+            # rlist[cat]=[{name:su.get_selected_word_from_db(name,[JC.SHORTDEF])}]
+            rlist[cat] = [{JC.NAME: name, JC.SHORTDEF:su.get_selected_word_from_db(name, [JC.SHORTDEF])[JC.SHORTDEF]}]
     complete_list[JC.LIST]=rlist
     return complete_list
 
@@ -130,6 +136,27 @@ def create(name, list, description=""):
     finally:
         client.close()
 
+def get_lists():
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+
+        list_coll = db[DC.LISTS_COLL]
+        list = []
+        result = list_coll.find()
+        if result is not None:
+            for cat in result:
+                list.append(cat[JC.NAME])
+            return list
+            return []
+    except Exception as exception:
+        traceback.print_exc()
+        return False
+    finally:
+        client.close()
+
 # print(get_compl_list('testlist'))
-lt=['abate','abash','chagrin']
-create('testlist1',lt)
+# lt=['abate','abash','chagrin']
+# create('testlist1',lt)
+# print(get_lists())

@@ -2,6 +2,8 @@
 from flask import Flask, jsonify, request, json
 
 from com.eurekamw_mg.utils import SearchUtils as su, WordListUtils as wlu, CategoryUtils as cu
+from com.eurekamw_mg.model import CategoryFile as cf
+from com.eurekamw_mg.REST import RESTConstant as RC
 
 app = Flask(__name__)
 
@@ -37,6 +39,36 @@ def get_category(cat_name):
     res=jsonify(result)
     return res
 
+
+@app.route('/category/create', methods=['POST'])
+def create_category():
+    if not (request.headers['Content-Type'] == 'application/json'):
+        return RC.INVALID_CONTENT_TYPE
+
+    payload = json.dumps(request.json)
+    name=payload['name']
+    list=wlu.generate_list(payload['list'])
+
+    cat=cf.Category(name,list)
+    is_successfull, result=cat.create()
+    if not is_successfull:
+        return RC.UNSUCCESSFUL_OPERATION
+    return result
+
+@app.route('/category/update', methods=['PUT'])
+def update_category():
+    if not (request.headers['Content-Type'] == 'application/json'):
+        return RC.INVALID_CONTENT_TYPE
+
+    payload = json.dumps(request.json)
+    name=payload['name']
+    list=wlu.generate_list(payload['list'])
+
+    result=cu.update_category(name,list)
+    if not result:
+        return RC.UNSUCCESSFUL_OPERATION
+
+    return result
 
 
 if __name__ == '__main__':

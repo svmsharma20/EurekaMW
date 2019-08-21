@@ -2,13 +2,13 @@ import traceback
 
 from com.eurekamw_mg.db import DBConstant as DC, DBUtils as dbu
 from com.eurekamw_mg.model import JSONCostants as JC
-from com.eurekamw_mg.utils import SearchUtils as su
+from com.eurekamw_mg.utils import SearchUtils as su,WordUtils as wu
 
 
 def add_categories(categories):
     full_result={}
     for category in categories:
-        result = category.add_category()
+        result = category.create()
         full_result[category.name] = result
 
 
@@ -100,7 +100,7 @@ def remove_words_from_category(category_name, word_list):
     finally:
         client.close()
 
-def add_words_to_category(category_name, word_list):
+def update_category(category_name, word_list):
     if not is_category_present(category_name):
         print("No category with name '{0}' is present in DB.".format(category_name))
         return False
@@ -124,11 +124,13 @@ def add_words_to_category(category_name, word_list):
         category_update_query[JC.NAME] = category_name
 
         set_query = {}
-        set_query[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
-
+        # set_query[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
+        set_query[JC.SET] = {JC.LIST: word_list}
         category_coll.update_one(category_update_query,set_query)
+        return True
     except:
         traceback.print_exc()
+        return False
     finally:
         client.close()
 
@@ -190,3 +192,40 @@ def get_category(category_name):
         return False
     finally:
         client.close()
+
+def get_category_names():
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+
+        cat_coll = db[DC.CATEGORY_COLL]
+        cat_list=[]
+        result=cat_coll.find()
+        if result is not None:
+            for cat in result:
+                cat_list.append(cat[JC.NAME])
+            return cat_list
+        return []
+    except Exception as exception:
+        traceback.print_exc()
+        return False
+    finally:
+        client.close()
+
+def get_compl_list(catname):
+    catlist=get_category(catname)
+    if catlist is None:
+        return None
+    catnames = catlist[JC.LIST]
+
+    complete_list=[]
+
+    for name in catnames:
+        word=su.get_selected_word_from_db(name, [JC.SHORTDEF])
+        list = {}
+        list[JC.NAME]=name
+        list[JC.SHORTDEF] = word[JC.SHORTDEF]
+        complete_list.append(list)
+
+    return complete_list
