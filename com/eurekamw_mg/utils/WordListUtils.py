@@ -7,7 +7,11 @@ from com.eurekamw_mg.model import JSONCostants as JC
 
 def generate_list(words):
     # Create a list from the input by splitting based on comma and trimming the whitespaces
-    wordList = [word.strip().lower() for word in words.split(',')]
+    wordList = []
+    for word in words.split(','):
+        word=word.strip().lower()
+        if(len(word)>0):
+            wordList.append(word)
     #return the wordlist
     return wordList
 
@@ -156,7 +160,9 @@ def get_lists():
     finally:
         client.close()
 
-print(get_compl_list('testlist'))
+l=generate_list('testlist,,cat,ku.,,hh,,jjj,kkk')
+
+print(l)
 # lt=['abate','abash','chagrin']
 # create('testlist1',lt)
 # print(get_lists())

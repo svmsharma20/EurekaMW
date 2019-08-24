@@ -1,5 +1,7 @@
-
+import os
 import traceback
+
+from flask import url_for
 
 from com.eurekamw_mg.utils import SearchUtils as su
 from com.eurekamw_mg.db import DBUtils as dbu, DBConstant as DC
@@ -58,4 +60,20 @@ def get_category(wordname):
     finally:
         client.close()
 
-# print(get_category('assail'))
+def load_words():
+    with open(os.path.abspath('.')+'/static/utils/words_alpha.txt') as word_file:
+        valid_words = set(word_file.read().split())
+
+    return valid_words
+
+def validate_wordlist(list):
+    vaild_list=[]
+    invaild_list=[]
+    english_words = load_words()
+    for word in list:
+        if word in english_words:
+            vaild_list.append(word)
+        else:
+            invaild_list.append(word)
+
+    return {JC.VALID_LIST:vaild_list,JC.INVALID_LIST:invaild_list}

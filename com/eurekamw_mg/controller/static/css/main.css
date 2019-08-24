@@ -818,10 +818,11 @@ legend {
       justify-content: center;
   -ms-flex-align: center;
       align-items: center;
-  background: url("../images/Searchs_008.png");
+  /*background: url("../images/Searchs_008.png");*/
   background-size: cover;
   padding: 15px;
   font-family: 'Roboto', sans-serif;
+  background-color:#445E81;
 }
 
 .s008 form {

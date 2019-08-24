@@ -30,3 +30,7 @@ LOGINID = 'loginid'
 USERNAME = 'username'
 
 PASSWORD = 'password'
+
+VALID_LIST = 'vlist'
+
+INVALID_LIST = "ivlist"
