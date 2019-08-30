@@ -31,7 +31,7 @@ def delete_category(category_name):
         # words_coll.update_one(word_update_query,set_query)
 
         delete_query={}
-        delete_query[JC.ID] = category_name
+        delete_query[JC.NAME] = category_name
 
         category_coll.delete_one(delete_query)
     except:
@@ -100,17 +100,22 @@ def remove_words_from_category(category_name, word_list):
     finally:
         client.close()
 
-def update_category(category_name, word_list):
+def update_category(category_name, new_category_name, new_word_list):
     if not is_category_present(category_name):
         print("No category with name '{0}' is present in DB.".format(category_name))
         return False
+
+    if is_category_present(new_category_name):
+        print("Category with name '{0}' is already present in DB.".format(new_category_name))
+        return False
+
     try:
         in_valid_word_list=[]
-        for word in word_list:
+        for word in new_word_list:
             is_valid = su.search(word)
             if not is_valid:
                in_valid_word_list.append(word)
-               word_list.remove(word)
+               new_word_list.remove(word)
 
         if len(in_valid_word_list) > 0:
             print('Unable to find following words: {0}'.format(in_valid_word_list))
@@ -123,10 +128,17 @@ def update_category(category_name, word_list):
         category_update_query={}
         category_update_query[JC.NAME] = category_name
 
-        set_query = {}
-        # set_query[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
-        set_query[JC.SET] = {JC.LIST: word_list}
-        category_coll.update_one(category_update_query,set_query)
+        new_data = {}
+        # new_data[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
+        new_data[JC.NAME] = new_category_name
+        new_data[JC.LIST] = new_word_list
+
+        set_query={}
+        set_query[JC.SET] = new_data
+
+        check_query = {}
+        check_query[JC.UPSERT] = 'True'
+        category_coll.update_one(category_update_query, set_query)
         return True
     except:
         traceback.print_exc()
@@ -229,3 +241,7 @@ def get_compl_list(catname):
         complete_list.append(list)
 
     return complete_list
+
+
+l=['dictum', 'bode']
+update_category('testcat', 'testcatadd23', l)

@@ -34,3 +34,5 @@ PASSWORD = 'password'
 VALID_LIST = 'vlist'
 
 INVALID_LIST = "ivlist"
+
+UPSERT = 'upsert'

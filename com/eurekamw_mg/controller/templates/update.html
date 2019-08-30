@@ -18,23 +18,23 @@
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
-    <link href="../static/css/update.css" rel="stylesheet" />
+    <link href="../../static/css/update.css" rel="stylesheet" />
 
 
     <!-- Site Icons -->
-    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="../static/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../../static/images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="../../static/images/apple-touch-icon.png">
 
 	<!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i" rel="stylesheet">
 
     <!-- Custom & Default Styles -->
-	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/css/carousel.css">
-    <link rel="stylesheet" href="../static/css/animate.css">
-    <link rel="stylesheet" href="../static/css/style.css">
+	<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../static/css/carousel.css">
+    <link rel="stylesheet" href="../../static/css/animate.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
 
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
 
@@ -43,7 +43,7 @@
 
     <!-- LOADER -->
     <div id="preloader">
-        <img class="preloader" src="../static/images/loader.gif" alt="">
+        <img class="preloader" src="../../static/images/loader.gif" alt="">
     </div><!-- end loader -->
     <!-- END LOADER -->
 
@@ -80,7 +80,7 @@
                             <span class="icon-bar"></span>
                         </button>
                         <div class="logo-normal">
-                            <a class="navbar-brand" href="../static/index.html"><img src="../static/images/logo.png" alt=""></a>
+                            <a class="navbar-brand" href="../../static/index.html"><img src="../../static/images/logo.png" alt=""></a>
                         </div>
                     </div>
 
@@ -101,13 +101,14 @@
     <div class="container-contact100">
 
 		<div class="wrap-contact100" style="display: block;">
-			<form class="contact100-form" action="/category/addcat" method="post">
+			<form class="contact100-form" action="/category/updatecat" method="post">
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Name is required">
 					<span class="label-input100">Category Name</span>
-					{% if result['name'] %}
-					<input class="input100" type="text" name="listname" placeholder="Enter your list name" value="{{result['name']}}">
+					{% if result['newname'] %}
+                    <input type="hidden"  name="oldlistname" value="{{result['oldname']}}">
+					<input class="input100" type="text" name="newcatname" placeholder="Enter your category name" value="{{result['newname']}}">
                     {% else %}
-                    <input class="input100" type="text" name="listname" placeholder="Enter your list name">
+                    <input class="input100" type="text" name="newcatname" placeholder="Enter your list name">
                     {% endif %}
 
 					<span class="focus-input100"></span>
@@ -147,7 +148,7 @@
 <!-- &nbsp;&nbsp;&nbsp;
 			           <a href="../https://www.w3docs.com/" class="contact100-form-btn " style="background-color: #BD0909; color: #fff;">Cancel</a>-->
 
-<!--	<script src="../static/js/main.js"></script>-->
+<!--	<script src="../../static/js/main.js"></script>-->
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -162,13 +163,13 @@
 
 
     <!-- jQuery Files -->
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/carousel.js"></script>
-    <script src="../static/js/animate.js"></script>
-    <script src="../static/js/custom.js"></script>
+    <script src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
+    <script src="../../static/js/carousel.js"></script>
+    <script src="../../static/js/animate.js"></script>
+    <script src="../../static/js/custom.js"></script>
     <!-- VIDEO BG PLUGINS -->
-    <script src="../static/js/videobg.js"></script>
+    <script src="../../static/js/videobg.js"></script>
 
 </body>
 </html>

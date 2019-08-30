@@ -101,9 +101,9 @@
     <div class="container-contact100">
 
 		<div class="wrap-contact100" style="display: block;">
-			<form class="contact100-form" action="/category/addcat" method="post">
+			<form class="contact100-form" action="/list/addlist" method="post">
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Name is required">
-					<span class="label-input100">Category Name</span>
+					<span class="label-input100">List Name</span>
 					{% if result['name'] %}
 					<input class="input100" type="text" name="listname" placeholder="Enter your list name" value="{{result['name']}}">
                     {% else %}

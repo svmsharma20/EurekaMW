@@ -112,7 +112,7 @@ def get_compl_list(listname):
     complete_list[JC.LIST]=rlist
     return complete_list
 
-def create(name, list, description=""):
+def create(name, list):
     try:
         in_valid_word_list = []
         for word in list:
@@ -131,12 +131,13 @@ def create(name, list, description=""):
 
         list_create_query = {}
         list_create_query[JC.NAME] = name
-        list_create_query[JC.DESCRIPTION] = description
         list_create_query[JC.LIST] = list
 
         list_coll.insert_one(list_create_query)
+        return True
     except:
         traceback.print_exc()
+        return False
     finally:
         client.close()
 
@@ -160,9 +161,46 @@ def get_lists():
     finally:
         client.close()
 
-l=generate_list('testlist,,cat,ku.,,hh,,jjj,kkk')
+def is_list_present(list_name):
+    try:
+        client = dbu.get_client()
 
-print(l)
+        db = client[DC.DB_NAME]
+        list_coll = db[DC.LISTS_COLL]
+
+        list_search_query={}
+        list_search_query[JC.NAME] = list_name
+
+        result = list_coll.count_documents(list_search_query)
+        if result == 0:
+            return False
+
+        return True
+    except:
+        traceback.print_exc()
+    finally:
+        client.close()
+
+def delete_list(list_name):
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+        list_coll = db[DC.LISTS_COLL]
+
+        delete_query={}
+        delete_query[JC.NAME] = list_name
+
+        list_coll.delete_one(delete_query)
+    except:
+        traceback.print_exc()
+    finally:
+        client.close()
+
+
+# l=generate_list('testlist,,cat,ku.,,hh,,jjj,kkk')
+
+# print(l)
 # lt=['abate','abash','chagrin']
 # create('testlist1',lt)
 # print(get_lists())
