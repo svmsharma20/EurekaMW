@@ -96,27 +96,34 @@ def update_catview(cat_name):
     for word in catlist[1:]:
         catliststr += ', '+word
     result={}
-    result['oldname'] = cat_name
-    result['newname'] = cat_name
+    result['oldcatname'] = cat_name
+    result['newcatname'] = cat_name
     result['list'] = catliststr
+    print(result)
     return render_template('update.html', result=result)
 
 @app.route('/category/updatecat', methods=['POST'])
 def update_category():
-    cat_name = request.form['listname'].strip().lower()
+    old_cat_name = request.form['oldcatname'].strip().lower()
+    new_cat_name = request.form['newcatname'].strip().lower()
     liststr = request.form['list']
 
     result = {}
-    result['name'] = cat_name
+    result['oldcatname'] = old_cat_name
+    result['newcatname'] = new_cat_name
     result['list'] = liststr
 
-    if len(cat_name)==0 or len(liststr)==0:
+    if len(new_cat_name)==0 or len(liststr)==0:
         result['error'] = RC.MISSING_DATA
-        return render_template('add.html', result=result)
+        return render_template('update.html', result=result)
 
-    if cu.is_category_present(cat_name):
+    if cu.is_category_present(new_cat_name):
         result['error'] = RC.CATEGORY_ALREADY_PRESENT
-        return render_template('add.html',result=result)
+        return render_template('update.html',result=result)
+
+    if not cu.is_category_present(old_cat_name):
+        result['error'] = RC.CATEGORY_NOT_FOUND
+        return render_template('update.html',result=result)
 
     list=[]
     for word in liststr.split(','):
@@ -125,15 +132,14 @@ def update_category():
     validatelist = wu.validate_wordlist(list)
     if len(validatelist[JC.INVALID_LIST]) > 0:
         result['error']= ['Invalid words: {0}'.format(validatelist[JC.INVALID_LIST])]
-        return render_template('add.html', result=result)
+        return render_template('update.html', result=result)
 
-    c = cf.Category(cat_name,list)
-    result = c.create()
+    result = cu.update_category(old_cat_name, new_cat_name, validatelist[JC.VALID_LIST])
     if result is None:
         result['error'] = RC.UNSUCCESSFUL_OPERATION
-        return render_template('add.html', result=result)
+        return render_template('update.html', result=result)
 
-    return redirect(url_for('category'))
+    return redirect(url_for('xcategory', cat_name=new_cat_name))
 
 @app.route('/category/delete/<cat_name>')
 def delete_cat(cat_name):
@@ -182,6 +188,57 @@ def add_list():
 
     return redirect(url_for('lists'))
 
+@app.route('/list/update/<list_name>')
+def update_listview(list_name):
+    list =  wlu.get_list_names(list_name)
+    liststr=list[0]
+    for word in list[1:]:
+        liststr += ', '+word
+    result={}
+    result['oldlistname'] = list_name
+    result['newlistname'] = list_name
+    result['list'] = liststr
+    print(result)
+    return render_template('updatelist.html', result=result)
+
+@app.route('/list/updatelist', methods=['POST'])
+def update_list():
+    old_list_name = request.form['oldlistname'].strip().lower()
+    new_list_name = request.form['newlistname'].strip().lower()
+    liststr = request.form['list']
+
+    result = {}
+    result['oldlistname'] = old_list_name
+    result['newlistname'] = new_list_name
+    result['list'] = liststr
+
+    if len(new_list_name)==0 or len(liststr)==0:
+        result['error'] = RC.MISSING_DATA
+        return render_template('updatelist.html', result=result)
+
+    if new_list_name != old_list_name and wlu.is_list_present(new_list_name):
+        result['error'] = RC.CATEGORY_ALREADY_PRESENT
+        return render_template('updatelist.html',result=result)
+
+    if not wlu.is_list_present(old_list_name):
+        result['error'] = RC.CATEGORY_NOT_FOUND
+        return render_template('updatelist.html',result=result)
+
+    list=[]
+    for word in liststr.split(','):
+        list.append(word.strip().lower())
+
+    validatelist = wu.validate_wordlist(list)
+    if len(validatelist[JC.INVALID_LIST]) > 0:
+        result['error']= ['Invalid words: {0}'.format(validatelist[JC.INVALID_LIST])]
+        return render_template('updatelist.html', result=result)
+
+    result = wlu.update_list(old_list_name, new_list_name, validatelist[JC.VALID_LIST])
+    if result is None:
+        result['error'] = RC.UNSUCCESSFUL_OPERATION
+        return render_template('updatelist.html', result=result)
+
+    return redirect(url_for('xlists', list_name=new_list_name))
 
 
 @app.route('/test')

@@ -197,6 +197,52 @@ def delete_list(list_name):
     finally:
         client.close()
 
+def update_list(list_name, new_list_name, new_word_list):
+    if not is_list_present(list_name):
+        print("No list with name '{0}' is present in DB.".format(list_name))
+        return False
+
+    if list_name != new_list_name and is_list_present(new_list_name):
+        print("List with name '{0}' is already present in DB.".format(new_list_name))
+        return False
+
+    try:
+        in_valid_word_list=[]
+        for word in new_word_list:
+            is_valid = su.search(word)
+            if not is_valid:
+               in_valid_word_list.append(word)
+               new_word_list.remove(word)
+
+        if len(in_valid_word_list) > 0:
+            print('Unable to find following words: {0}'.format(in_valid_word_list))
+
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+        category_coll = db[DC.LISTS_COLL]
+
+        category_update_query={}
+        category_update_query[JC.NAME] = list_name
+
+        new_data = {}
+        # new_data[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
+        new_data[JC.NAME] = new_list_name
+        new_data[JC.LIST] = new_word_list
+
+        set_query={}
+        set_query[JC.SET] = new_data
+
+        check_query = {}
+        check_query[JC.UPSERT] = 'True'
+        category_coll.update_one(category_update_query, set_query)
+        return True
+    except:
+        traceback.print_exc()
+        return False
+    finally:
+        client.close()
+
 
 # l=generate_list('testlist,,cat,ku.,,hh,,jjj,kkk')
 
@@ -204,3 +250,7 @@ def delete_list(list_name):
 # lt=['abate','abash','chagrin']
 # create('testlist1',lt)
 # print(get_lists())
+
+
+# l=['dictum', 'bode', 'assent']
+# update_list('testlist1', 'testlist1', l)

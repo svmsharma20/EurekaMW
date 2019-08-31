@@ -105,7 +105,7 @@ def update_category(category_name, new_category_name, new_word_list):
         print("No category with name '{0}' is present in DB.".format(category_name))
         return False
 
-    if is_category_present(new_category_name):
+    if category_name != new_category_name and is_category_present(new_category_name):
         print("Category with name '{0}' is already present in DB.".format(new_category_name))
         return False
 
@@ -242,6 +242,3 @@ def get_compl_list(catname):
 
     return complete_list
 
-
-l=['dictum', 'bode']
-update_category('testcat', 'testcatadd23', l)
