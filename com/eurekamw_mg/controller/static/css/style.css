@@ -276,8 +276,9 @@ HEADER
 .navbar-default .nav>li>a {
     color: #fff !important;
     text-transform: capitalize;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 500;
+    font-family: Poppins-Regular;
     outline: none;
 }
 

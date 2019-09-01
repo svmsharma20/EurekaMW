@@ -18,16 +18,19 @@ def search():
 @app.route('/word', methods=['GET'])
 def word():
     word_name=request.args['name'].strip().lower()
-    result = su.search(word_name)
-    if result is None:
+    res = su.search(word_name)
+    if res is None:
         return jsonify('{}')
 
-    res = jsonify(result)
-    # print(result)  #40,43,52
-    return render_template('word.html', res=result)
+    result={}
+    result[JC.NAME] = res[JC.ID]
+    result[JC.SHORTDEF] = res[JC.SHORTDEF]
+    return render_template('xsearch.html', result=result)
 
 @app.route('/category')
-def category():
+def category(
+
+):
     list=cu.get_category_names()
     return render_template('category.html', list=list)
 
