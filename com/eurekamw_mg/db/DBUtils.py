@@ -3,9 +3,7 @@
 """
 import traceback
 
-import dns
-
-from pymongo import MongoClient, errors
+from pymongo import MongoClient
 from com.eurekamw_mg.db import DBConstant as DC
 from com.eurekamw_mg.model import UserFile as uf, JSONCostants as JC
 
@@ -13,15 +11,16 @@ def get_client():
     hostname = DC.HOSTNAME
     port = DC.PORT
     try:
-        client = MongoClient(hostname, port)
+        # client = MongoClient(hostname, port)
 
-        # client = MongoClient(DC.CONNECT_URL)
+        client = MongoClient(DC.CONNECT_URL)
         if client is None:
             raise Exception('Unable to get mongodb client got server: {0}; port:{1}'.format(hostname,port))
             return None
         return client
     except:
         traceback.print_exc()
+        print("Something went wrong")
 
 
 
@@ -66,4 +65,3 @@ def is_id_present(loginid):
         traceback.print_exc()
     finally:
         client.close()
-

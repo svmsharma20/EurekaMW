@@ -13,4 +13,5 @@ WORDS_COLL = 'words'
 
 CATEGORY_COLL = 'category'
 
-CONNECT_URL='mongodb+srv://eureka:eureka@cluster0-hnzhq.mongodb.net/eureka?retryWrites=true&w=majority'
+CONNECT_URL = "mongodb+srv://eureka:eureka@eureka-data-grid-fuite.gcp.mongodb.net/test?retryWrites=true&w=majority"
+# CONNECT_URL='mongodb+srv://eurekaadmin:eurekapwd@eureka-data-grid-fuite.mongodb.net/eureka?retryWrites=true&w=majority'

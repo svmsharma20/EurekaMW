@@ -39,7 +39,7 @@ def get_word_from_mw(wordname):
 
 # Prepares URL for search
 def get_url(word):
-    searchURL = SC.URL.format(word,SC.KEY_DICTIONARY_1)
+    searchURL = SC.KEY_INTERMEDIATE_URL.format(word, SC.KEY_INTERMEDIATE_1)
     return searchURL
 
 def get_word_from_db(wordname):
