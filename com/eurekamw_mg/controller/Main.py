@@ -47,7 +47,10 @@ def lists():
 
 @app.route('/xlists/<list_name>')
 def xlists(list_name):
-    result=wlu.get_compl_list(list_name)
+    # result=wlu.get_compl_list(list_name)
+    # result={'name': 'globalizer-1', 'list': {'feeling embarrased': [{'name': 'abash', 'shortdef': ['to destroy the self-control or self-confidence of']}, {'name': 'chagrin', 'shortdef': ['a feeling of being annoyed by failure or disappointment']}, {'name': 'disconcert', 'shortdef': ['to disturb the arrangement of : upset', 'to disturb the self-control of']}], 'abnormal': [{'name': 'aberrant', 'shortdef': ['being different from the usual or natural type']}, {'name': 'anomalous', 'shortdef': ['not following a general rule or method : irregular unusual']}, {'name': 'anomaly', 'shortdef': ['an act or instance of not following the general rule or method', 'something anomalous : something different, abnormal, strange, or not easily described']}, {'name': 'atypical', 'shortdef': ['not typical : irregular']}, {'name': 'erratic', 'shortdef': ['marked by lack of consistency or regularity', 'not of the usual or normal kind : eccentric']}], 'supporting in something wrong': [{'name': 'abet', 'shortdef': ['to actively encourage or aid']}, {'name': 'accomplice', 'shortdef': ['someone associated with another in wrongdoing']}, {'name': 'collusion', 'shortdef': ['secret agreement or cooperation for an illegal or dishonest purpose']}, {'name': 'connive', 'shortdef': ['to cooperate secretly or have a secret understanding']}], 'None': [{'name': 'abeyance', 'shortdef': ['a temporary interruption of activity']}, {'name': 'dormant', 'shortdef': ['not active but capable of becoming active', 'sleeping or appearing to be asleep : sluggish', 'having growth or other biological activity much reduced or suspended']}]}}
+    result = wlu.get_list(list_name)
+    print(result)
     name=result[JC.NAME]
     list=result[JC.LIST]
     res=(name,list)
@@ -244,10 +247,10 @@ def update_list():
     return redirect(url_for('xlists', list_name=new_list_name))
 
 
-@app.route('/test')
-def test():
-    result = wlu.get_compl_list("testlist")
-    return render_template('test.html', test=result)
+# @app.route('/test')
+# def test():
+#     result = wlu.get_compl_list("testlist")
+#     return render_template('test.html', test=result)
 
 if __name__ == '__main__':
     app.run(debug = True)

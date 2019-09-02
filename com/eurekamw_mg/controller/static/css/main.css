@@ -1291,7 +1291,7 @@ table thead tr {
   background: #36304a;
 }
 table tbody tr {
-  height: 50px;
+  height: 40px;
 }
 table tbody tr:last-child {
   border: 0;

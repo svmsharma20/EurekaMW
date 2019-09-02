@@ -85,18 +85,21 @@ def get_list_names(listname):
 
         results = list_coll.find(list_create_query)
 
-        if results is not None:
-            word_list = results[0][JC.LIST]
+        if results[0] is not None:
+            for cat in results[0][JC.LIST]:
+                for word in results[0][JC.LIST][cat]:
+                    word_list.append(word[JC.NAME])
+            # word_list = results[0][JC.LIST]
         return word_list
     except:
         traceback.print_exc()
     finally:
         client.close()
 
-def get_compl_list(listname):
-    namelist=get_list_names(listname)
+def get_compl_list(namelist):
+    # namelist=get_list_names(listname)
     complete_list={}
-    complete_list[JC.NAME]=listname
+    # complete_list[JC.NAME]=listname
 
     rlist={}
     for name in namelist:
@@ -109,8 +112,8 @@ def get_compl_list(listname):
         else:
             # rlist[cat]=[{name:su.get_selected_word_from_db(name,[JC.SHORTDEF])}]
             rlist[cat] = [{JC.NAME: name, JC.SHORTDEF:su.get_selected_word_from_db(name, [JC.SHORTDEF])[JC.SHORTDEF]}]
-    complete_list[JC.LIST]=rlist
-    return complete_list
+    # complete_list[JC.LIST]=rlist[JC.LIST]
+    return rlist
 
 def create(name, list):
     try:
@@ -131,7 +134,7 @@ def create(name, list):
 
         list_create_query = {}
         list_create_query[JC.NAME] = name
-        list_create_query[JC.LIST] = list
+        list_create_query[JC.LIST] = get_compl_list(list)
 
         list_coll.insert_one(list_create_query)
         return True
@@ -228,7 +231,7 @@ def update_list(list_name, new_list_name, new_word_list):
         new_data = {}
         # new_data[JC.PUSH] = {JC.LIST: {JC.EACH: word_list}}
         new_data[JC.NAME] = new_list_name
-        new_data[JC.LIST] = new_word_list
+        new_data[JC.LIST] = get_compl_list(new_word_list)
 
         set_query={}
         set_query[JC.SET] = new_data
@@ -254,3 +257,24 @@ def update_list(list_name, new_list_name, new_word_list):
 
 # l=['dictum', 'bode', 'assent']
 # update_list('testlist1', 'testlist1', l)
+
+def get_list(listname):
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+
+        words_schema = db[DC.LISTS_COLL]
+        search_data = {}
+        search_data[JC.NAME] = listname
+        if words_schema.count_documents(search_data) == 0:
+            return None
+        result = words_schema.find(search_data)
+        print(result[0])
+        return result[0]
+    except Exception as exception:
+        traceback.print_exc()
+        return None
+    finally:
+        client.close()
+
