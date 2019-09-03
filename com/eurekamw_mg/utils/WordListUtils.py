@@ -278,3 +278,37 @@ def get_list(listname):
     finally:
         client.close()
 
+def get_refesh_list(wordlist,cat_name):
+    try:
+        client = dbu.get_client()
+
+        db = client[DC.DB_NAME]
+
+        list_coll = db[DC.LISTS_COLL]
+        list = set()
+        search_query={}
+        inner_search_query={}
+        inner_search_query[JC.IN]=wordlist
+        search_query['list.'+cat_name+'.name']=inner_search_query
+
+        fetch_query={}
+        fetch_query[JC.NAME]=1
+        fetch_query[JC.ID]=0
+
+        results = list_coll.find(search_query,fetch_query)
+        for result in results:
+            list.add(result[JC.NAME])
+        if list is not None:
+            return list
+        return []
+    except Exception as exception:
+        traceback.print_exc()
+        return False
+    finally:
+        client.close()
+
+def refesh(listname):
+    list = get_list_names(listname)
+    update_list(listname, listname, list)
+
+# print(cu.get)

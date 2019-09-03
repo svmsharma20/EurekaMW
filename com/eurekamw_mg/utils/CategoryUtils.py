@@ -2,7 +2,7 @@ import traceback
 
 from com.eurekamw_mg.db import DBConstant as DC, DBUtils as dbu
 from com.eurekamw_mg.model import JSONCostants as JC
-from com.eurekamw_mg.utils import SearchUtils as su,WordUtils as wu
+from com.eurekamw_mg.utils import SearchUtils as su, WordListUtils as wlu
 
 
 def add_categories(categories):
@@ -33,7 +33,14 @@ def delete_category(category_name):
         delete_query={}
         delete_query[JC.NAME] = category_name
 
+        cat = get_category(category_name)
+        catlist = cat[JC.LIST]
+
         category_coll.delete_one(delete_query)
+
+        listnames = wlu.get_refesh_list(catlist, category_name)
+        for listname in listnames:
+            wlu.refesh(listname)
     except:
         traceback.print_exc()
     finally:
@@ -139,6 +146,10 @@ def update_category(category_name, new_category_name, new_word_list):
         check_query = {}
         check_query[JC.UPSERT] = 'True'
         category_coll.update_one(category_update_query, set_query)
+
+        listnames = wlu.get_refesh_list(new_word_list,category_name)
+        for listname in listnames:
+            wlu.refesh(listname)
         return True
     except:
         traceback.print_exc()
@@ -241,4 +252,3 @@ def get_compl_list(catname):
         complete_list.append(list)
 
     return complete_list
-

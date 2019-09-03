@@ -52,9 +52,17 @@ class Category:
 
             if category_coll.count_documents(search_query) == 0:
                 category_coll.insert_one(category_data)
-                return True, result
+                # listnames = wlu.get_refesh_list(self.list)
+                # for listname in listnames:
+                #     wlu.refesh(listname)
+                # return True, result
+            else:
+                category_coll.replace_one(search_query, category_data)
 
-            category_coll.replace_one(search_query, category_data)
+            listnames=wlu.get_refesh_list(self.list,'None')
+            for listname in listnames:
+                wlu.refesh(listname)
+
             return True, result
         except Exception as exception:
             traceback.print_exc()
