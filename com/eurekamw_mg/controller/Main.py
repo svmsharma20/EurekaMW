@@ -253,4 +253,4 @@ def update_list():
 #     return render_template('test.html', test=result)
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug = False)
