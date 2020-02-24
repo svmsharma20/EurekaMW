@@ -1,0 +1,7 @@
+1) Checkout the code.
+2) Install pip3. 
+3) Install flask.
+4) Install pymongo.
+5) Open the terminal in the root directory of the project.
+6) Run the following cmd:
+	python -m com.eurekamw_mg.REST.RestServices
