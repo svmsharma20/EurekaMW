@@ -1,11 +1,13 @@
 
 from flask import Flask, jsonify, request, json
+from flask_cors import CORS
 
 from com.eurekamw_mg.utils import SearchUtils as su, WordListUtils as wlu, CategoryUtils as cu
 from com.eurekamw_mg.model import CategoryFile as cf
 from com.eurekamw_mg.REST import RESTConstant as RC
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/search/<word_name>', methods=['GET'])
 def get_word(word_name):
